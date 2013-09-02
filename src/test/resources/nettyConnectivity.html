@@ -2,14 +2,16 @@
 <html>
 <body>
 
-<button id="btn" onclick="sendJson();">send JSON</button>
+<button id="btn" onclick="sendJson();">send JSON to Netty</button>
 
 <script>
     var socket;
 
-    window.onload = function () {
+    function openSocket() {
         socket = new WebSocket("ws://" + "localhost" + ":" + 8088 + "/nettyConnectivity");
-    };
+    }
+
+    window.onload = openSocket;
 
     function sendJson() {
 
@@ -20,7 +22,6 @@
         };
 
         socket.send(JSON.stringify(dummyEvent));
-        console.log("sent");
     }
 </script>
 

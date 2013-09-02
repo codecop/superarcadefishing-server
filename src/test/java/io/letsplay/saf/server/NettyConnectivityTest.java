@@ -10,8 +10,6 @@ import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
-import io.netty.util.concurrent.DefaultEventExecutorGroup;
-import io.netty.util.concurrent.EventExecutorGroup;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,23 +21,34 @@ import static org.junit.Assert.assertEquals;
 
 public class NettyConnectivityTest {
 
+    public static final String TEST_PAGE = "file:///home/raphael/projects/superarcadefishing-server/src/test/resources/nettyConnectivity.html";
+    public static final String NETTY_URL = "/nettyConnectivity";
+    public static final int NETTY_PORT = 8088;
+    public static final String BUTTON_ID = "btn";
 
-    // param(1) just example to show the thread model with 2 connected clients while live coding
-    EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-    // param(1) just example to show the thread model with 2 connected clients while live coding
-    EventLoopGroup workerGroup = new NioEventLoopGroup(1);
-    Channel channel;
+    public static final int WAIT_TIME = 500;
+
+    private EventLoopGroup bossGroup;
+    private EventLoopGroup workerGroup;
+
+    private int receivedCount;
+
+    private class CountingInputHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
+
+        @Override
+        protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) {
+            receivedCount++;
+        }
+    }
 
     private WebDriver webDriver;
-    private int wasClicked;
 
     @Before
     public void startNettyServer() throws InterruptedException {
+        bossGroup = new NioEventLoopGroup();
+        workerGroup = new NioEventLoopGroup();
 
-        // additional thread pool for blocking handler
-        final EventExecutorGroup executorGroup = new DefaultEventExecutorGroup(8);
-
-        final ServerBootstrap bootstrap = new ServerBootstrap();
+        ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -49,23 +58,13 @@ public class NettyConnectivityTest {
                                 new HttpRequestDecoder(),
                                 new HttpObjectAggregator(65536),
                                 new HttpResponseEncoder(),
-                                new WebSocketServerProtocolHandler("/nettyConnectivity"));
-//                                    new JSUGWebSocketHandler(channels)); // normal example without another thread pool
-
-                        // register blocking or long lasting handler to additional thread pool
-                        ch.pipeline().addLast(executorGroup, new ChannelInboundMessageHandlerAdapter<TextWebSocketFrame>() {
-
-                            @Override
-                            public void messageReceived(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
-                                wasClicked = wasClicked + 1;
-                            }
-                        });
+                                new WebSocketServerProtocolHandler(NETTY_URL),
+                                new CountingInputHandler());
                     }
                 });
 
-        channel = bootstrap.bind(8088).sync().channel();
+        bootstrap.bind(NETTY_PORT).sync();
     }
-
 
     @Before
     public void openFireFox() {
@@ -74,22 +73,21 @@ public class NettyConnectivityTest {
 
     @Test
     public void JsShouldCallNetty() throws InterruptedException {
-        webDriver.get("file:///home/raphael/projects/superarcadefishing-server/src/test/resources/nettyConnectivity.html");
-        Thread.sleep(2000);
-        // channel.closeFuture().sync();
-        // TODO check netty
-        webDriver.findElement(By.id("btn")).click();
-        assertEquals(1, wasClicked);
+        webDriver.get(TEST_PAGE);
+        Thread.sleep(WAIT_TIME);
+        webDriver.findElement(By.id(BUTTON_ID)).click();
+        assertEquals(1, receivedCount);
     }
 
     @After
-    public void closeNetty() {
-        bossGroup.shutdown();
-        workerGroup.shutdown();
+    public void shutdownNettyServer() {
+        bossGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
     }
 
     @After
     public void closeFireFox() {
         webDriver.close();
     }
+
 }

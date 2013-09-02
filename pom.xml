@@ -29,13 +29,13 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.0.0.CR1</version>
+            <version>4.0.8.Final</version>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -78,6 +78,7 @@
         </plugins>
     </build>
 
+    <!--
     <distributionManagement>
         <repository>
             <id>local-releases</id>
@@ -95,6 +96,7 @@
             <url>file:///TODO/mvn2repo/sites/</url>
         </site>
     </distributionManagement>
+    -->
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
