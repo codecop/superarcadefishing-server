@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<button id="btn" onclick="sendJson();">send JSON</button>
+
+<script>
+    var socket;
+
+    window.onload = function () {
+        socket = new WebSocket("ws://" + "localhost" + ":" + 8088 + "/nettyConnectivity");
+    };
+
+    function sendJson() {
+
+        var dummyEvent = {
+            timeStamp: Date.now(),
+            type: "miss",
+            level: 2
+        };
+
+        socket.send(JSON.stringify(dummyEvent));
+        console.log("sent");
+    }
+</script>
+
+</body>
+</html>
