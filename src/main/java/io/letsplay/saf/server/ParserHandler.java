@@ -18,9 +18,12 @@ public class ParserHandler extends SimpleChannelInboundHandler<TextWebSocketFram
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws IOException {
-        Map<String,Object> objectMap = mapper.map(msg.text());
-        // TODO if sth technical is missing
-        controller.process(objectMap);
+    protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) {
+        try {
+            Map<String, Object> objectMap = mapper.map(msg.text());
+            controller.process(objectMap);
+        } catch (Exception ex) {
+            ctx.channel().write(new TextWebSocketFrame(ex.toString()));
+        }
     }
 }
