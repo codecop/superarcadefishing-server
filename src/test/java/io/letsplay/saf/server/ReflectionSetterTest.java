@@ -10,37 +10,11 @@ import static org.junit.Assert.assertEquals;
 
 public class ReflectionSetterTest {
 
-    public static class Bean {
+    @SuppressWarnings("unused") // fields get assigned via reflection
+    private static class Bean {
         private String someField;
         private int someInt;
         private Date someDate;
-
-        public String getSomeField() {
-            return someField;
-        }
-
-        @SuppressWarnings("unused") // used with reflection
-        public void setSomeField(String someField) {
-            this.someField = someField;
-        }
-
-        public int getSomeInt() {
-            return someInt;
-        }
-
-        @SuppressWarnings("unused") // used with reflection
-        public void setSomeInt(int someInt) {
-            this.someInt = someInt;
-        }
-
-        public Date getSomeDate() {
-            return someDate;
-        }
-
-        @SuppressWarnings("unused") // used with reflection
-        public void setSomeDate(Date someDate) {
-            this.someDate = someDate;
-        }
     }
 
     @Test
@@ -52,7 +26,7 @@ public class ReflectionSetterTest {
         values.put("someField", value);
         new ReflectionSetter(bean).set(values);
 
-        assertEquals(value, bean.getSomeField());
+        assertEquals(value, bean.someField);
     }
 
     @Test
@@ -63,7 +37,7 @@ public class ReflectionSetterTest {
         values.put("someInt", 10L);
         new ReflectionSetter(bean).set(values);
 
-        assertEquals(10, bean.getSomeInt());
+        assertEquals(10, bean.someInt);
     }
 
     @Test
@@ -75,6 +49,6 @@ public class ReflectionSetterTest {
         values.put("someDate", timestamp);
         new ReflectionSetter(bean).set(values);
 
-        assertEquals(new Date(timestamp), bean.getSomeDate());
+        assertEquals(new Date(timestamp), bean.someDate);
     }
 }
