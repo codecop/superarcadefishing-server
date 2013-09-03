@@ -20,9 +20,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:TODO/${project.artifactId}</connection>
-        <developerConnection>scm:git:TODO/${project.artifactId}</developerConnection>
-        <url>TODO/${project.artifactId}</url>
+        <connection>scm:git:git://github.com/letsplayIO/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:https://github.com/letsplayIO/${project.artifactId}.git</developerConnection>
+        <url>https://github.com/letsplayIO/${project.artifactId}</url>
     </scm>
 
     <dependencies>
@@ -83,25 +83,50 @@
         </plugins>
     </build>
 
-    <!--
+    <!-- maybe add these repos to your settings.xml: -->
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>letsplayIO-releases</id>
+            <name>letsplay.io Releases</name>
+            <url>file:///home/raphael/Projects/maven-repo/releases</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>letsplayIO-snapshots</id>
+            <name>letsplay.io Snapshots</name>
+            <url>file:///home/raphael/Projects/maven-repo/snapshots</url>
+        </repository>
+    </repositories>
+
     <distributionManagement>
         <repository>
             <id>local-releases</id>
-            <name>Code Cop Code Release Repository</name>
-            <url>file:///TODO/mvn2repo/releases/</url>
+            <name>letsplay.io Release Repository</name>
+            <url>file:///home/raphael/Projects/maven-repo/releases/</url>
         </repository>
         <snapshotRepository>
             <id>local-snapshots</id>
-            <name>Code Cop Code Snapshot Repository</name>
-            <url>file:///TODO/mvn2repo/snapshots/</url>
+            <name>letsplay.io Snapshot Repository</name>
+            <url>file:///home/raphael/Projects/maven-repo/snapshots/</url>
         </snapshotRepository>
         <site>
             <id>local-site</id>
-            <name>Code Cop Code Site Repository</name>
-            <url>file:///TODO/mvn2repo/sites/</url>
+            <name>letsplay.io Site Repository</name>
+            <url>file:///home/raphael/Projects/maven-repo/sites/</url>
         </site>
     </distributionManagement>
-    -->
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
