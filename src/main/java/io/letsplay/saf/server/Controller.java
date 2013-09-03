@@ -4,6 +4,6 @@ import java.util.Map;
 
 public interface Controller {
 
-    void process(Map<String, Object> any);
+    void process(Map<String, Object> attributes);
 
 }

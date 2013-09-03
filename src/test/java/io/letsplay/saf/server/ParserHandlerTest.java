@@ -36,10 +36,10 @@ public class ParserHandlerTest {
         final boolean[] nextWasCalled = new boolean[1];
         controller = new Controller() {
             @Override
-            public void process(Map<String, Object> any) {
-                assertEquals(1378129744128L, any.get(TIME_STAMP));
-                assertEquals("miss", any.get(TYPE));
-                assertEquals(2L, any.get(LEVEL));
+            public void process(Map<String, Object> attributes) {
+                assertEquals(1378129744128L, attributes.get(TIME_STAMP));
+                assertEquals("miss", attributes.get(TYPE));
+                assertEquals(2L, attributes.get(LEVEL));
 
                 nextWasCalled[0] = true;
             }
