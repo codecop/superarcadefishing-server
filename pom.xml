@@ -93,7 +93,7 @@
             </snapshots>
             <id>letsplayIO-releases</id>
             <name>letsplay.io Releases</name>
-            <url>file:///home/raphael/Projects/maven-repo/releases</url>
+            <url>file:///home/raphael/projects/maven-repo/releases</url>
         </repository>
         <repository>
             <releases>
@@ -104,7 +104,7 @@
             </snapshots>
             <id>letsplayIO-snapshots</id>
             <name>letsplay.io Snapshots</name>
-            <url>file:///home/raphael/Projects/maven-repo/snapshots</url>
+            <url>file:///home/raphael/projects/maven-repo/snapshots</url>
         </repository>
     </repositories>
 
@@ -112,17 +112,17 @@
         <repository>
             <id>local-releases</id>
             <name>letsplay.io Release Repository</name>
-            <url>file:///home/raphael/Projects/maven-repo/releases/</url>
+            <url>file:///home/raphael/projects/maven-repo/releases/</url>
         </repository>
         <snapshotRepository>
             <id>local-snapshots</id>
             <name>letsplay.io Snapshot Repository</name>
-            <url>file:///home/raphael/Projects/maven-repo/snapshots/</url>
+            <url>file:///home/raphael/projects/maven-repo/snapshots/</url>
         </snapshotRepository>
         <site>
             <id>local-site</id>
             <name>letsplay.io Site Repository</name>
-            <url>file:///home/raphael/Projects/maven-repo/sites/</url>
+            <url>file:///home/raphael/projects/maven-repo/sites/</url>
         </site>
     </distributionManagement>
 
