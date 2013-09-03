@@ -1,8 +1,6 @@
 package io.letsplay.saf.server;
 
-import java.beans.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Map;
 
@@ -14,34 +12,31 @@ public class ReflectionSetter {
         this.bean = bean;
     }
 
-    public void set(Map<String, Object> values) {
+    public void set(Map<String, Object> valuesToSetFields) {
         try {
+            for (Field fieldToSet : bean.getClass().getDeclaredFields()) {
 
-            setByReflection(values);
+                if (valuesToSetFields.containsKey(fieldToSet.getName())) {
 
-        } catch (IntrospectionException | InvocationTargetException | IllegalAccessException e) {
+                    convertValueIfNeededAndSetBeanField(fieldToSet, valuesToSetFields.get(fieldToSet.getName()));
+                }
+            }
+
+        } catch (IllegalAccessException e) {
             throw new IllegalArgumentException("error during reflection", e);
         }
     }
 
-    private void setByReflection(Map<String, Object> values) throws IntrospectionException, IllegalAccessException, InvocationTargetException {
-        BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
-        for (PropertyDescriptor descriptor : beanInfo.getPropertyDescriptors()) {
-            Object value = values.get(descriptor.getName());
+    private void convertValueIfNeededAndSetBeanField(Field fieldToSet, Object valueToSetField)
+            throws IllegalAccessException {
+        fieldToSet.setAccessible(true);
 
-            boolean hasMatchingValueInMap = value != null;
-            if (hasMatchingValueInMap) {
-                Method writeMethod = descriptor.getWriteMethod();
-                Class<?> argumentType = writeMethod.getParameterTypes()[0];
-
-                value = convertLongToIntIfNeeded(argumentType, value);
-
-                value = convertLongToDateIfNeeded(argumentType, value);
-
-                writeMethod.invoke(bean, value);
-            }
-
-        }
+        fieldToSet.set(bean,
+                convertLongToIntIfNeeded(
+                        fieldToSet.getType(),
+                        convertLongToDateIfNeeded(fieldToSet.getType(), valueToSetField)
+                )
+        );
     }
 
     private Object convertLongToIntIfNeeded(Class<?> argumentType, Object value) {
