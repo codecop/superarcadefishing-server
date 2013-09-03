@@ -5,12 +5,12 @@ import java.util.Date;
 /**
  * The fisherman throws his rod into the sea at a certain position to catch something.
  */
-public class RodThrown {
+class RodThrown {
 
-    private Date time;
-    private String which;
-    private int xCoordinate;
-    private String result;
-    private Npc caught;
+    Date time;
+    String which;
+    int xCoordinate;
+    String result;
+    Npc caught;
 
 }

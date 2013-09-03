@@ -6,19 +6,13 @@ import java.util.Map;
 
 public class ReflectionSetter {
 
-    private final Object bean;
-
-    public ReflectionSetter(Object bean) {
-        this.bean = bean;
-    }
-
-    public void set(Map<String, Object> valuesToSetFields) {
+    public void set(Object bean, Map<String, Object> valuesToSetFields) {
         try {
             for (Field fieldToSet : bean.getClass().getDeclaredFields()) {
 
                 if (valuesToSetFields.containsKey(fieldToSet.getName())) {
 
-                    convertValueIfNeededAndSetBeanField(fieldToSet, valuesToSetFields.get(fieldToSet.getName()));
+                    convertValueIfNeededAndSetBeanField(bean, fieldToSet, valuesToSetFields.get(fieldToSet.getName()));
                 }
             }
 
@@ -27,7 +21,7 @@ public class ReflectionSetter {
         }
     }
 
-    private void convertValueIfNeededAndSetBeanField(Field fieldToSet, Object valueToSetField)
+    private void convertValueIfNeededAndSetBeanField(Object bean, Field fieldToSet, Object valueToSetField)
             throws IllegalAccessException {
         fieldToSet.setAccessible(true);
 

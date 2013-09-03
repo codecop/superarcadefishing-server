@@ -6,18 +6,17 @@ import java.util.List;
 /**
  * State of the game at a certain point in time.
  */
-public class GameProgress {
+class GameProgress {
 
-    private Date sessionStarted;
-    private Date gameStarted;
-    private Date levelStarted;
-    private Date waveStarted;
+    Date sessionStarted;
+    Date gameStarted;
+    Date levelStarted;
+    Date waveStarted;
 
-    private int numberOfGames;
-    private String level;
+    int numberOfGames;
+    String level;
     // private String environment; // e.g. oily, foggy, high gravitation
-    private int wave;
+    int wave;
 
-    private List<Npc> npcs;
-
+    List<Npc> npcs;
 }

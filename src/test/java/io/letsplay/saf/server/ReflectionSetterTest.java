@@ -24,7 +24,7 @@ public class ReflectionSetterTest {
         Map<String, Object> values = new HashMap<>();
         final String value = "abc";
         values.put("someField", value);
-        new ReflectionSetter(bean).set(values);
+        new ReflectionSetter().set(bean, values);
 
         assertEquals(value, bean.someField);
     }
@@ -35,7 +35,7 @@ public class ReflectionSetterTest {
 
         Map<String, Object> values = new HashMap<>();
         values.put("someInt", 10L);
-        new ReflectionSetter(bean).set(values);
+        new ReflectionSetter().set(bean, values);
 
         assertEquals(10, bean.someInt);
     }
@@ -47,7 +47,7 @@ public class ReflectionSetterTest {
         Map<String, Object> values = new HashMap<>();
         final long timestamp = 1234567890L;
         values.put("someDate", timestamp);
-        new ReflectionSetter(bean).set(values);
+        new ReflectionSetter().set(bean, values);
 
         assertEquals(new Date(timestamp), bean.someDate);
     }
