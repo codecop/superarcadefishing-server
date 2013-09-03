@@ -1,5 +1,6 @@
-package io.letsplay.saf.server;
+package io.letsplay.saf.server.connector;
 
+import io.letsplay.saf.server.Controller;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;

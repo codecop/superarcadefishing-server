@@ -1,4 +1,4 @@
-package io.letsplay.saf.server;
+package io.letsplay.saf.server.connector;
 
 import org.junit.Test;
 

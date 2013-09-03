@@ -33,7 +33,7 @@ public class FishingMetricsTest {
 
     // convert map to bean
     // verify mandatory values
-    // add generated values - server timestanmp, metadata of metrics business
-    // call persister
+    // add generated values - server timestamp, metadata of metrics business
+    // call persist
 
 }

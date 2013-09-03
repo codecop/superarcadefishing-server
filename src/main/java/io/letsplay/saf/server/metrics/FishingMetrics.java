@@ -16,6 +16,10 @@ public class FishingMetrics implements Controller {
     public void process(Map<String, Object> attributes) {
         FishingData metricsData = new FishingData();
 
+//        Fisherman fm = new Fisherman();
+//        fillFrom(fm, attributes.get("fisherman"));
+//        metricsData.setFisherman(fm);
+
         metricsData.setInsertionTime(new Date());
 
         dao.persist(metricsData);
