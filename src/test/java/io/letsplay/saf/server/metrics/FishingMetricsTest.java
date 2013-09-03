@@ -4,6 +4,7 @@ import io.letsplay.saf.server.Controller;
 import io.letsplay.saf.server.ReflectionSetter;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +53,8 @@ public class FishingMetricsTest {
                     ((GameProgress) bean).level = "1st";
                 else if (bean instanceof RodThrown)
                     ((RodThrown) bean).xCoordinate = 0;
+                else if (bean instanceof Npc)
+                    ((Npc) bean).name = "npc";
             }
         };
 
@@ -63,6 +66,7 @@ public class FishingMetricsTest {
                 assertEquals(1, action.fisherMan.score);
                 assertEquals("1st", action.gameProgress.level);
                 assertEquals(0, action.rodThrown.xCoordinate);
+                assertEquals("npc", action.gameProgress.npcs.get(0).name);
 
                 persistWasCalled[0] = true;
             }
@@ -70,7 +74,11 @@ public class FishingMetricsTest {
 
         metrics = new FishingMetrics(dao, reflectionMock);
 
-        metrics.process(new HashMap<String, Object>());
+        @SuppressWarnings("unchecked")
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("npcs", Arrays.asList(new HashMap<String, Object>()));
+
+        metrics.process(attributes);
 
         assertTrue("did not call persist", persistWasCalled[0]);
     }
