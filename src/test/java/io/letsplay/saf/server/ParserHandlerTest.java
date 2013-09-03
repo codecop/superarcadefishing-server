@@ -1,9 +1,9 @@
 package io.letsplay.saf.server;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 
@@ -28,14 +28,10 @@ public class ParserHandlerTest {
     private TextWebSocketFrame message = mock(TextWebSocketFrame.class);
     private Controller controller = mock(Controller.class);
 
-    @Before
-    public void setUpMocks() {
-        when(context.channel()).thenReturn(callbackChannel);
-    }
-
     @Test
     public void shouldParseJson() throws IOException {
         when(message.text()).thenReturn(JSON_INPUT);
+        when(context.channel()).thenReturn(callbackChannel);
 
         final boolean[] nextWasCalled = new boolean[1];
         controller = new Controller() {
@@ -62,6 +58,7 @@ public class ParserHandlerTest {
     @Test
     public void shouldAnswerOnInvalidJson() throws IOException {
         when(message.text()).thenReturn(INVALID_JSON);
+        when(context.channel()).thenReturn(callbackChannel);
 
         handleRead();
 
@@ -70,14 +67,31 @@ public class ParserHandlerTest {
     }
 
     @Test
-    public void shouldAnswerOnEmpty() throws IOException {
+    public void shouldAnswerExactErrorMessage() throws IOException {
         when(message.text()).thenReturn("");
+
+        final boolean[] writeWasCalled = new boolean[1];
+        callbackChannel = new NullChannel() {
+
+            @Override
+            public ChannelFuture write(Object msg) {
+                String returnedJson = ((TextWebSocketFrame) msg).text();
+                Map<String, Object> messageAttributes = new JsonMapper().map(returnedJson);
+                assertEquals(true, messageAttributes.get("error"));
+                assertEquals("java.lang.IllegalArgumentException", messageAttributes.get("type"));
+                assertEquals("invalid JSON received from client", messageAttributes.get("message"));
+                assertTrue("no stacktrace", messageAttributes.containsKey("stacktrace"));
+
+                writeWasCalled[0] = true;
+                return null;
+            }
+
+        };
+        when(context.channel()).thenReturn(callbackChannel);
 
         handleRead();
 
-        verify(callbackChannel).write(any((TextWebSocketFrame.class)));
+        assertTrue("did not call write", writeWasCalled[0]);
     }
-
-    // TODO return error codes as JSON nicely
 
 }
