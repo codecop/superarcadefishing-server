@@ -2,6 +2,8 @@ package io.letsplay.saf.server;
 
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 public class JsonMapperTest {
@@ -13,6 +15,9 @@ public class JsonMapperTest {
 
     @Test
     public void shouldCreateComplexMessage() {
-        assertEquals("{\"some\":123,\"key\":\"value\"}", new JsonMapper().build("key", "value").with("some", 123).toJson());
+        String createdJson = new JsonMapper().build("key", "value").with("some", 123).toJson();
+        Map<String, Object> messageAttributes = new JsonMapper().map(createdJson);
+        assertEquals(123L, messageAttributes.get("some"));
+        assertEquals("value", messageAttributes.get("key"));
     }
 }
