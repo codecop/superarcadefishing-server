@@ -11,15 +11,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.net.URL;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FishDataIntegrationTest {
 
-    public static final String TEST_PAGE = "file:///home/raphael/projects/superarcadefishing-server/src/test/resources/fishDataIntegration.html";
+    public static final String TEST_PAGE = "fishDataIntegration.html";
     public static final String NETTY_URL = "/fishDataIntegration";
     public static final int NETTY_PORT = 8089;
     public static final String BUTTON_ID = "btn";
@@ -59,7 +58,10 @@ public class FishDataIntegrationTest {
 
     @Test
     public void fullJsonRequestShouldEndInDao() throws InterruptedException {
-        webDriver.get(TEST_PAGE);
+        final URL testPage = getClass().getClassLoader().getResource(TEST_PAGE);
+        assertNotNull(testPage);
+
+        webDriver.get(testPage.toString());
         Thread.sleep(WAIT_TIME);
         webDriver.findElement(By.id(BUTTON_ID)).click();
 

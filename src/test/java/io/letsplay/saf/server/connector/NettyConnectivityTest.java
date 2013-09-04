@@ -9,11 +9,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.net.URL;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class NettyConnectivityTest {
 
-    public static final String TEST_PAGE = "file:///home/raphael/projects/superarcadefishing-server/src/test/resources/nettyConnectivity.html";
+    public static final String TEST_PAGE = "nettyConnectivity.html";
     public static final String NETTY_URL = "/nettyConnectivity";
     public static final int NETTY_PORT = 8088;
     public static final String BUTTON_ID = "btn";
@@ -46,9 +49,13 @@ public class NettyConnectivityTest {
 
     @Test
     public void JsShouldCallNetty() throws InterruptedException {
-        webDriver.get(TEST_PAGE);
+        final URL testPage = getClass().getClassLoader().getResource(TEST_PAGE);
+        assertNotNull(testPage);
+
+        webDriver.get(testPage.toString());
         Thread.sleep(WAIT_TIME);
         webDriver.findElement(By.id(BUTTON_ID)).click();
+
         assertEquals(1, receivedCount);
     }
 
