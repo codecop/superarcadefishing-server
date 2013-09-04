@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<button id="btn" onclick="sendJson();">send JSON to Fish metrics service</button>
+
+<script>
+    var socket;
+
+    function openSocket() {
+        socket = new WebSocket("ws://" + "localhost" + ":" + 8089 + "/fishDataIntegration");
+        socket.onmessage = function (event) {
+            console.log(event.data)
+        }
+    }
+
+    window.onload = openSocket;
+
+    function sendJson() {
+
+        var fishMetricsEvent = {
+            route: "metrics_fishing_event",
+
+            fisherMan: {
+                score: 3500,
+                scoreMultiplier: 20,
+                remainingTime: 20,
+                upgrades: [ "dynamite", "harpoon" ]
+            },
+            gameProgress: {
+                sessionStarted: Date.now() - 9*60*1000,
+                gameStarted: Date.now() - 3*60*1000,
+                levelStarted: Date.now() - 1*60*1000,
+                waveStarted: Date.now() - 25*1000,
+                numberOfGames: 2,
+                level: "Nordkap",
+                wave: 3,
+                npcs: [
+                    {
+                        xCoordinate: 2,
+                        yCoordinate: 5,
+                        name: "goldfish",
+                        xDirectionVector: 1,
+                        yDirectionVector: 0
+                    },
+                    {
+                        xCoordinate: 7,
+                        yCoordinate: 10,
+                        name: "shark",
+                        xDirectionVector: 5,
+                        yDirectionVector: -1
+                    }
+                ]
+            },
+            rodThrown: {
+                time: Date.now(),
+                which: "normalRod",
+                xCoordinate: 5,
+                result: "catch",
+                caught: {
+                    xCoordinate: 5,
+                    yCoordinate: 15,
+                    name: "goldfish",
+                    xDirectionVector: -1,
+                    yDirectionVector: 3
+                }
+            }
+        };
+
+        socket.send(JSON.stringify(fishMetricsEvent));
+    }
+</script>
+
+</body>
+</html>

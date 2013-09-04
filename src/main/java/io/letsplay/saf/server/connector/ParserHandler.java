@@ -1,19 +1,21 @@
 package io.letsplay.saf.server.connector;
 
 import io.letsplay.saf.server.Controller;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.util.Map;
 
+@ChannelHandler.Sharable
 public class ParserHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     private final JsonMapper mapper;
     private final Controller controller;
 
-    public ParserHandler(Controller controller1, JsonMapper mapper) {
-        this.controller = controller1;
+    public ParserHandler(Controller controller, JsonMapper mapper) {
+        this.controller = controller;
         this.mapper = mapper;
     }
 
@@ -30,6 +32,7 @@ public class ParserHandler extends SimpleChannelInboundHandler<TextWebSocketFram
                                        with("stacktrace", ex).
                                        toJson();
             ctx.channel().write(new TextWebSocketFrame(jsonString));
+            ctx.channel().flush();
         }
     }
 }
