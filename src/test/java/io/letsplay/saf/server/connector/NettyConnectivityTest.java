@@ -20,7 +20,7 @@ public class NettyConnectivityTest {
 
     public static final int WAIT_TIME = 500;
 
-    private volatile int receivedCount;
+    private int receivedCount;
 
     private class CountingInputHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 

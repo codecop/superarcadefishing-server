@@ -3,9 +3,7 @@ package io.letsplay.saf.server.metrics;
 import io.letsplay.saf.server.AttributesClassSetter;
 import io.letsplay.saf.server.Controller;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class FishingMetrics implements Controller {
@@ -19,9 +17,13 @@ public class FishingMetrics implements Controller {
     @Override
     public void process(Map<String, Object> attributes) {
         FishingData metricsData = new FishingData();
+        metricsData.insertionTime = new Date();
+
         new AttributesClassSetter(metricsData).set(attributes);
 
-        metricsData.insertionTime = new Date();
+        // verify mandatory values
+
+        // add generated values - e.g. day of week, week, metadata of metrics business
 
         dao.persist(metricsData);
     }

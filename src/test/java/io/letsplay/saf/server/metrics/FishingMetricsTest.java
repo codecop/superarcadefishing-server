@@ -62,7 +62,4 @@ public class FishingMetricsTest {
         metrics.process(attributes);
     }
 
-    // verify mandatory values
-    // add generated values - server timestamp, metadata of metrics business
-
 }
