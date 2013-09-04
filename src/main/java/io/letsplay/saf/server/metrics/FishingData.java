@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class FishingData {
 
-    FisherMan fisherMan;
-    GameProgress gameProgress;
-    RodThrown rodThrown;
+    public FisherMan fisherMan;
+    public GameProgress gameProgress;
+    public RodThrown rodThrown;
 
-    Date insertionTime;
+    public Date insertionTime;
 }

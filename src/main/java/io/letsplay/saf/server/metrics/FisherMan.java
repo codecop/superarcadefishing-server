@@ -2,11 +2,11 @@ package io.letsplay.saf.server.metrics;
 
 import java.util.List;
 
-class FisherMan {
+public class FisherMan {
 
-    int score;
-    int scoreMultiplier;
-    int remainingTime;
+    public int score;
+    public int scoreMultiplier;
+    public int remainingTime;
 
-    List<String> upgrades;
+    public List<String> upgrades;
 }

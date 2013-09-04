@@ -1,9 +1,9 @@
 package io.letsplay.saf.server.metrics;
 
-class Npc {
-    int xCoord;
-    int yCoord;
-    String name;
-    int xDirectionVector;
-    int yDirectionVector;
+public class Npc {
+    public int xCoord;
+    public int yCoord;
+    public String name;
+    public int xDirectionVector;
+    public int yDirectionVector;
 }
