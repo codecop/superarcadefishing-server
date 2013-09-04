@@ -1,6 +1,5 @@
 package io.letsplay.saf.server;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -9,7 +8,7 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 
-public class AttributesDtoSetterTest {
+public class AttributesClassSetterTest {
 
     public static class DTO {
         public String text;
@@ -30,7 +29,7 @@ public class AttributesDtoSetterTest {
         Map<String, Object> attributes = new HashMap<>();
         final String value = "abc";
         attributes.put("text", value);
-        new AttributesDtoSetter().set(dto, attributes);
+        new AttributesClassSetter(dto).set(attributes);
 
         assertEquals(value, dto.text);
     }
@@ -41,7 +40,7 @@ public class AttributesDtoSetterTest {
 
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("number", 10L);
-        new AttributesDtoSetter().set(dto, attributes);
+        new AttributesClassSetter(dto).set(attributes);
 
         assertEquals(10, dto.number);
     }
@@ -53,7 +52,7 @@ public class AttributesDtoSetterTest {
         Map<String, Object> attributes = new HashMap<>();
         final long timestamp = 1234567890L;
         attributes.put("time", timestamp);
-        new AttributesDtoSetter().set(dto, attributes);
+        new AttributesClassSetter(dto).set(attributes);
 
         assertEquals(new Date(timestamp), dto.time);
     }
@@ -62,7 +61,7 @@ public class AttributesDtoSetterTest {
     public void shouldNotSetNestedWhenNotGiven() {
         DTO dto = new DTO();
 
-        new AttributesDtoSetter().set(dto, new HashMap<String, Object>());
+        new AttributesClassSetter(dto).set(new HashMap<String, Object>());
 
         assertNull(dto.nested);
     }
@@ -75,7 +74,7 @@ public class AttributesDtoSetterTest {
         nestedAttributes.put("name", "Peter");
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("nested", nestedAttributes);
-        new AttributesDtoSetter().set(dto, attributes);
+        new AttributesClassSetter(dto).set(attributes);
 
         assertNotNull(dto.nested);
         assertEquals("Peter", dto.nested.name);
@@ -90,7 +89,7 @@ public class AttributesDtoSetterTest {
 
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("many", Arrays.asList(nestedAttributes));
-        new AttributesDtoSetter().set(dto, attributes);
+        new AttributesClassSetter(dto).set(attributes);
 
         assertNotNull(dto.many);
         assertNotNull(dto.many.get(0));
