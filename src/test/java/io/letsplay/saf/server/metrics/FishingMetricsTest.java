@@ -7,9 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FishingMetricsTest {
 
