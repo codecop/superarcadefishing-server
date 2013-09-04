@@ -1,18 +1,7 @@
 package io.letsplay.saf.server.connector;
 
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpRequestDecoder;
-import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,9 +20,6 @@ public class NettyConnectivityTest {
 
     public static final int WAIT_TIME = 500;
 
-    private EventLoopGroup bossGroup;
-    private EventLoopGroup workerGroup;
-
     private int receivedCount;
 
     private class CountingInputHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
@@ -44,29 +30,13 @@ public class NettyConnectivityTest {
         }
     }
 
+    private Server server = new Server(NETTY_URL, NETTY_PORT, new CountingInputHandler());
+
     private WebDriver webDriver;
 
     @Before
     public void startNettyServer() throws InterruptedException {
-        bossGroup = new NioEventLoopGroup();
-        workerGroup = new NioEventLoopGroup();
-
-        ServerBootstrap bootstrap = new ServerBootstrap();
-        bootstrap.group(bossGroup, workerGroup)
-                .channel(NioServerSocketChannel.class)
-                .childHandler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(
-                                new HttpRequestDecoder(),
-                                new HttpObjectAggregator(65536),
-                                new HttpResponseEncoder(),
-                                new WebSocketServerProtocolHandler(NETTY_URL),
-                                new CountingInputHandler());
-                    }
-                });
-
-        bootstrap.bind(NETTY_PORT).sync();
+        server.run();
     }
 
     @Before
@@ -84,8 +54,7 @@ public class NettyConnectivityTest {
 
     @After
     public void shutdownNettyServer() {
-        bossGroup.shutdownGracefully();
-        workerGroup.shutdownGracefully();
+        server.shutDown();
     }
 
     @After
